@@ -9,13 +9,14 @@ class Subject extends Model
 {
     protected $fillable = [
         'code',
-        'title'
+        'title',
+        'student_id'
     ];
 
     use HasFactory;
 
     public function student()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, 'student_id');
     }
 }

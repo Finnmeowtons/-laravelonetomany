@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->bigInteger('author_id')->unsigned();
-            $table->foreign('author_id')->references('id')->on('authors');
+            $table->bigInteger('student_id')->unsigned();
+            $table->foreign('student_id')->references('id')->on('students');
             $table->timestamps();
+
         });
     }
 

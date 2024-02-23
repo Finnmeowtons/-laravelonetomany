@@ -7,51 +7,45 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    //* Display all students with subjects
+
     public function index()
     {
-        return Student::with('subjects')->get();
+        $students = Student::get();
+        return response()->json($students);
     }
 
-    //* Create new student with subject
     public function store(Request $request)
     {
-        $studentData = $request->only('name', 'course');
-        $student = Student::create($studentData);
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'course' => 'required|max:255', 
+        ]);
 
-        if ($request->has('subjects')) {
-            $student->subjects()->createMany($request->input('subjects'));
-        }
-
-        return response()->json(['message' => 'Student created successfully', 'data' => $student], 201);
+        $student = Student::create($validatedData);
+        return response()->json($student, 201); // 201 Created status
     }
 
-    //* Display student subject
+
     public function show(Student $student)
     {
-        return $student->load('subjects');
+        return response()->json($student->load('subjects'));
     }
 
-    //* Update student and subject
     public function update(Request $request, Student $student)
     {
-        $studentData = $request->only('name', 'course');
-        $student->update($studentData);
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'course' => 'required|max:255',
+        ]);
 
-        if ($request->has('subjects')) {
-            $student->subjects()->delete();
-            $student->subjects()->createMany($request->input('subjects'));
-        }
-
-        return response()->json(['message' => 'Student updated successfully']);
+        $student->update($validatedData);
+        return response()->json($student);
     }
 
-    //* Delete student and subject
     public function destroy(Student $student)
     {
-        $student->subjects()->delete();
         $student->delete();
 
-        return response()->json(['message' => 'Student deleted successfully']);
+        return response()->json(null, 204); // 204 No Content status
     }
 }
