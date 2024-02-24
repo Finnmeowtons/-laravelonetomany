@@ -18,4 +18,9 @@ class Student extends Model
     {
         return $this->hasMany(Subject::class);
     }
+
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
 }

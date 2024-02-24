@@ -10,7 +10,7 @@ class StudentController extends Controller
 
     public function index()
     {
-        $students = Student::get();
+        $students = Student::with('books')->get();
         return response()->json($students);
     }
 
@@ -25,6 +25,21 @@ class StudentController extends Controller
         return response()->json($student, 201); // 201 Created status
     }
 
+    public function storeSubject(Request $request)
+{
+    $student = Student::create($request->all());
+
+    $subject = $student->subjects()->create([
+        'code' => $request->input('subject.code'),
+        'title' => $request->input('subject.title'),
+        'student_id' => $request->input('id')
+    ]);
+
+    return response()->json([
+        'student' => $student,
+        'subject' => $subject
+    ]);
+}
 
     public function show(Student $student)
     {

@@ -23,5 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('books', BookController::class);
+Route::post('students/subjects', [StudentController::class, 'storeSubject']);
 Route::apiResource('students', StudentController::class);
 Route::apiResource('subjects', SubjectsController::class);
